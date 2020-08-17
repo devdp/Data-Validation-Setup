@@ -26,6 +26,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
         integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ=="
         crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
     <script>
         $(document).ready(function () {
             $(".item").click(function () {
@@ -33,22 +36,46 @@
                 $(this).addClass("active");
             });
         });
+
+        var role = "{{user}}";
+        alert(role);
+
         function addrecord() {
             document.getElementById('add').style.display = 'inline';
             document.getElementById('view').style.display = 'none';
+            html = ' ';
+            $("#tab").innerHTML(html);
         }
 
         function viewdata() {
-            document.getElementById('view').style.display = 'inline';
+            if (role == 'all') {
+                document.getElementById('view').style.display = 'inline';
+            }
+            else {
+                document.getElementById('view').style.display = 'none';
+            }
             document.getElementById('add').style.display = 'none';
+            $.get("/getdata").done(function (data) {
+                data = JSON.parse(data);
+                len = data.length;
+                for (i = 0; i < len; i++) {
+                    d = data[i];
+                    html = `<tr><td>${new Date(d.timestamp).toUTCString()}</td><td>${d.user}</td><td>${d.order_number}</td><td>${d.trans_id}</td><td>${d.Amount}</td></tr>`;
+                    $("#tab").append(html);
+                }
+            })
+            $(document).ready(function () {
+                $('#table').DataTable();
+            });
         }
-        function update(){
+
+        function update() {
             var ord = document.getElementById('ordnum').value;
             var trans = document.getElementById('transid').value;
             var amt = document.getElementById('amt').value;
-            $.get('/update',{ord:ord,trans:trans,amt:amt}).done(function (data){
-                html = '<div class="alert alert-danger" role="alert">'+data+'</div>';
-                document.getElementById('alt').innerHTML=html;
+            $.get('/update', { ord: ord, trans: trans, amt: amt }).done(function (data) {
+                html = '<div class="alert alert-danger" role="alert">' + data + '</div>';
+                document.getElementById('alt').innerHTML = html;
             })
         }
     </script>
@@ -67,10 +94,15 @@
             display: table;
             clear: both;
         }
+
+        .info-color {
+            background-color: background-color: #a4508b;
+            background-image: linear-gradient(326deg, #a4508b 0%, #5f0a87 74%);
+        }
     </style>
 </head>
 
-<body>
+<body style="background-color: #eec0c6;background-image: linear-gradient(315deg, #eec0c6 0%, #7ee8fa 74%);">
     <div class="ui inverted segment">
         <div class="ui inverted secondary pointing menu">
             <a class="active item" onclick="addrecord()">
@@ -81,9 +113,9 @@
             </a>
         </div>
     </div>
-    <div class="row">
+    <div class="row" id="add" style="display: inline;">
         <div class="column">
-            <div id="add" style="display: inline;">
+            <div>
                 <!-- Material form contact -->
                 <div class="card">
 
@@ -108,7 +140,7 @@
                             <div class="md-form">
                                 <input type="text" id="amt" class="form-control">
                                 <label for="materialContactFormEmail">Amount</label>
-                            </div>                            
+                            </div>
                             <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
                                 onclick="update()">Send</button>
 
@@ -122,7 +154,7 @@
             </div>
         </div>
         <div class="column">
-            <div >
+            <div>
                 <div class="card">
                     <h5 class="card-header info-color white-text text-center py-4">
                         <strong>Update Status</strong>
@@ -142,6 +174,24 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div style="display: inline;">
+        <div id="view" style="display: none;">
+            <table class="ui red table" id="table">
+                <thead>
+                    <tr>
+                        <th>TimeStamp</th>
+                        <th>Recorded By</th>
+                        <th>Order Number</th>
+                        <th>Transaction ID</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tab" style="color: black;">
+                    
+                </tbody>
+            </table>
         </div>
     </div>
 </body>

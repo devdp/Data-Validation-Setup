@@ -13,13 +13,14 @@ def login():
 @app.route('/index', methods = ['GET','POST'])
 def index():
     global username
-    # username = request.form['username']
-    # pasw = request.form['pass']
-    # if len(df[(user_df['username']==username) & (user_df['passw'] == pasw)])>0:
-    #     return render_template('index.html',user = role)
-    # else:
-    #     return render_template('login.html',error = 'Invalid Creds!')
-    return render_template('index.html',user = 'all')
+    username = request.form['username']
+    pasw = request.form['pass']
+    role = df.loc[(user_df['username']==username) & (user_df['passw']==pasw),'role'].iloc[0]
+    if len(df[(user_df['username']==username) & (user_df['passw'] == pasw)])>0:
+        return render_template('index.html',user = role)
+    else:
+        return render_template('login.html',error = 'Invalid Creds!')
+#    return render_template('index.html',user='all')
 
 @app.route('/update', methods = ['GET','POST'])
 def update():
@@ -32,5 +33,11 @@ def update():
         return updation
     return next_proc
 
+@app.route('/getdata', methods=['GET','POST'])
+def getdata():
+    data = data_storage.get_data()
+    data = data.to_json(orient='records')
+    return data
+
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')

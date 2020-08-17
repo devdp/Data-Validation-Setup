@@ -10,7 +10,7 @@ def updatenew(user, timestamp, order_number, trans_id, Amount):
         conn.execute(query)
     return 'updated'
 
-def get_data_users():
+def get_data_user():
     query = "select * from users;"
     return pd.read_sql(query,engine2)
 
