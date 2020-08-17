@@ -44,29 +44,59 @@
             document.getElementById('add').style.display = 'inline';
             document.getElementById('view').style.display = 'none';
             html = ' ';
-            $("#tab").innerHTML(html);
+            document.getElementById('tab').innerHTML = html;
         }
 
         function viewdata() {
             if (role == 'all') {
                 document.getElementById('view').style.display = 'inline';
+$(function() {
+  $("#example").DataTable();
+
+  // Premade test data, you can also use your own
+  var testDataUrl = "http://ec2-18-223-38-113.us-east-2.compute.amazonaws.com:7003/getdata"
+ $.ajax({
+      type: 'GET',
+      url: testDataUrl,
+      contentType: "text/plain",
+      dataType: 'json',
+      success: function (data) {
+        myJsonData = data;
+console.log(data);
+        populateDataTable(myJsonData);
+      },
+      error: function (e) {
+        console.log("There was an error with your request...");
+        console.log("error: " + JSON.stringify(e));
+      }
+    });
+
+  // populate the data table with JSON data
+  function populateDataTable(data) {
+    console.log("populating data table...");
+    // clear the table before populating it with more data
+    $("#table").DataTable().clear();
+    var length = Object.keys(data.data).length;
+    for(var i = 1; i < length+1; i++) {
+      var d = data.data['s'+i];
+
+      // You could also use an ajax property on the data table initialization
+      $('#table').dataTable().fnAddData( [
+        d.timestamp,
+        d.user,
+        d.order_number,
+        d.trans_id,
+	d.Amount
+      ]);
+    }
+  }
+})();
             }
             else {
                 document.getElementById('view').style.display = 'none';
             }
             document.getElementById('add').style.display = 'none';
-            $.get("/getdata").done(function (data) {
-                data = JSON.parse(data);
-                len = data.length;
-                for (i = 0; i < len; i++) {
-                    d = data[i];
-                    html = `<tr><td>${new Date(d.timestamp).toUTCString()}</td><td>${d.user}</td><td>${d.order_number}</td><td>${d.trans_id}</td><td>${d.Amount}</td></tr>`;
-                    $("#tab").append(html);
-                }
-            })
-            $(document).ready(function () {
-                $('#table').DataTable();
-            });
+            
         }
 
         function update() {
