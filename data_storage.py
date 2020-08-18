@@ -18,10 +18,10 @@ def get_data():
     query = "select * from data order by timestamp desc;"
     return pd.read_sql(query,engine)
 
-def check(ordn,trans,amt):
+def check(ordn,trans):
     query = "select * from data;"
     df = pd.read_sql(query,engine)
-    index_num = list(np.where((df["order_number"] == ordn) & (df['trans_id'] == trans) & (df['Amount'] == float(amt)))[0])
+    index_num = list(np.where((df["order_number"] == ordn) & (df['trans_id'] == trans))[0])
     if len(index_num)>0:
         index_num = int(index_num[0])+1
         return 'Already Exist At Row Number {}'.format(str(index_num))
