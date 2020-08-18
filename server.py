@@ -15,10 +15,11 @@ def index():
     global username
     username = request.form['username']
     pasw = request.form['pass']
-    role = user_df.loc[(user_df['username']==username) & (user_df['passw']==pasw),'role'].iloc[0]
-    if len(user_df[(user_df['username']==username) & (user_df['passw'] == pasw)])>0:
-        return render_template('index.html',user = role)
-    else:
+    try:
+        role = user_df.loc[(user_df['username']==username) & (user_df['passw']==pasw),'role'].iloc[0]
+        if len(user_df[(user_df['username']==username) & (user_df['passw'] == pasw)])>0:
+            return render_template('index.html',user = role)
+    except:
         return render_template('login.html',error = 'Invalid Creds!')
 #    return render_template('index.html',user='all')
 
