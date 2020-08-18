@@ -28,3 +28,9 @@ def check(ordn,trans):
     else:
         return 'Not Exist'
     return 'Not able to check'
+
+def create_new_user(user,passw,role):
+    query = "insert into users values('"+user+"','"+passw+"','"+role+"');"
+    with engine.begin() as conn:
+        conn.execute(query)
+    return 'New User Added'

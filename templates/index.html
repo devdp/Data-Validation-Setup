@@ -60,10 +60,12 @@
         function addrecord() {
             document.getElementById('add').style.display = 'inline';
             document.getElementById('view').style.display = 'none';
+            document.getElementById('newuser').style.display = 'none';
         }
 
         function viewdata() {
             document.getElementById('add').style.display = 'none';
+            document.getElementById('newuser').style.display = 'none';
             if (role == 'all') {
                 document.getElementById('view').style.display = 'inline';
                 $(function () {
@@ -83,17 +85,12 @@
                         dataType: 'json',
                         success: function (data) {
                             myJsonData = data;
-                            console.log(data);
                             populateDataTable(myJsonData);
-                        },
-                        error: function (e) {
-                            
                         }
                     });
 
                     // populate the data table with JSON data
                     function populateDataTable(data) {
-                        console.log("populating data table...");
                         // clear the table before populating it with more data
                         $("#table").DataTable().clear();
                         var length = Object.keys(data.data).length;
@@ -118,6 +115,17 @@
 
         }
 
+        function newuser() {
+            document.getElementById('view').style.display = 'none';
+            document.getElementById('add').style.display = 'none';
+            if (role == 'all') {
+                document.getElementById('newuser').style.display = 'inline';
+            }
+            else {
+                document.getElementById('newuser').style.display = 'none';
+            }
+        }
+
         function update() {
             var ord = document.getElementById('ordnum').value;
             var trans = document.getElementById('transid').value;
@@ -125,6 +133,16 @@
             $.get('/update', { ord: ord, trans: trans, amt: amt }).done(function (data) {
                 html = '<div class="alert alert-danger" role="alert">' + data + '</div>';
                 document.getElementById('alt').innerHTML = html;
+            })
+        }
+
+        function newusercreate() {
+            var user_name = document.getElementById('user_name').value;
+            var user_password = document.getElementById('user_pass').value;
+            var e = document.getElementById("sel");
+            var user_role = e.options[e.selectedIndex].value;
+            $.get('/newuser', { user_name: user_name, user_password: user_password, user_role: user_role }).done(function (data) {
+                alert(data);
             })
         }
     </script>
@@ -159,6 +177,9 @@
             </a>
             <a class="item" onclick="viewdata()">
                 View Data
+            </a>
+            <a class="item" onclick="newuser()">
+                Create User
             </a>
         </div>
     </div>
@@ -241,6 +262,49 @@
 
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div style="display: inline;">
+        <div id="newuser" style="display: none;">
+            <!-- Material form contact -->
+            <div class="card">
+
+                <h5 class="card-header info-color white-text text-center py-4">
+                    <strong>Contact us</strong>
+                </h5>
+
+                <!--Card content-->
+                <div class="card-body px-lg-5 pt-0">
+
+                    <!-- Form -->
+                    <div class="text-center" style="color: #757575;">
+
+                        <!-- Name -->
+                        <div class="md-form mt-3">
+                            <input type="text" id="user_name" class="form-control">
+                            <label for="materialContactFormName">Username</label>
+                        </div>
+                        <div class="md-form mt-3">
+                            <input type="password" id="user_pass" class="form-control">
+                            <label for="materialContactFormName">Password</label>
+                        </div>
+
+                        <!-- Subject -->
+                        <span>Access</span>
+                        <select id="sel" class="mdb-select">
+                            <option value="" disabled>Choose option</option>
+                            <option value="limited" selected>Limited</option>
+                            <option value="all">All</option>
+                        </select>
+
+                        <!-- Send button -->
+                        <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
+                            onclick="newusercreate()">Create User</button>
+                    </div>
+                    <!-- Form -->
+                </div>
+            </div>
+            <!-- Material form contact -->
         </div>
     </div>
 </body>
