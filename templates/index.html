@@ -56,7 +56,6 @@
         });
 
         var role = "{{user}}";
-        alert(role);
 
         function addrecord() {
             document.getElementById('add').style.display = 'inline';
@@ -88,8 +87,7 @@
                             populateDataTable(myJsonData);
                         },
                         error: function (e) {
-                            console.log("There was an error with your request...");
-                            console.log("error: " + JSON.stringify(e));
+                            
                         }
                     });
 
