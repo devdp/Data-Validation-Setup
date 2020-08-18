@@ -18,10 +18,10 @@ def get_data():
     query = "select * from data order by timestamp desc;"
     return pd.read_sql(query,engine)
 
-def check(ordn,trans):
+def check(ordn):
     query = "select * from data;"
     df = pd.read_sql(query,engine)
-    index_num = list(np.where((df["order_number"] == ordn) & (df['trans_id'] == trans))[0])
+    index_num = list(np.where((df["order_number"] == ordn))[0])
     if len(index_num)>0:
         index_num = int(index_num[0])+1
         return 'Already Exist At Row Number {}'.format(str(index_num))
@@ -30,7 +30,13 @@ def check(ordn,trans):
     return 'Not able to check'
 
 def create_new_user(user,passw,role):
-    query = "insert into users values('"+user+"','"+passw+"','"+role+"');"
-    with engine.begin() as conn:
-        conn.execute(query)
-    return 'New User Added'
+    query = "select * from users;"
+    df = pd.read_sql(query,engine)
+    index_num = list(np.where((df['username']==user))[0])
+    if len(index_num)>0:
+        return 'User Already Exists'
+    else:
+        query = "insert into users values('"+user+"','"+passw+"','"+role+"');"
+        with engine.begin() as conn:
+            conn.execute(query)
+        return 'New User Added'
