@@ -28,10 +28,10 @@ def update():
     ordn = request.args.get('ord')
     trans = request.args.get('trans')
     amt = request.args.get('amt')
-    next_proc = data_storage.check(ordn)
+    next_proc = data_storage.check(trans)
     if next_proc == 'Not Exist':
         updation = data_storage.update(username,str(datetime.datetime.now().replace(microsecond=0)),ordn,trans,amt)
-        return updation
+        return 'success'
     return next_proc
 
 @app.route('/getdata', methods=['GET','POST'])

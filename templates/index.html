@@ -79,7 +79,8 @@
             
                 $(function () {
                     $("#table").DataTable({
-                        dom: 'Bfrtip',
+                        retrieve: true,
+dom: 'Bfrtip',
                         buttons: [
                             'copy', 'csv', 'excel', 'pdf', 'print'
                         ]
@@ -137,13 +138,19 @@
             var trans = document.getElementById('transid').value;
             var amt = document.getElementById('amt').value;
             $.get('/update', { ord: ord, trans: trans, amt: amt }).done(function (data) {
-                html = '<div class="alert alert-danger" role="alert">' + data + '</div>';
-                document.getElementById('alt').innerHTML = html;
+            if(data=='success'){
+    html = '<div class="alert alert-danger" role="alert">Successfully Updated</div>';
+                document.getElementById('para').innerHTML = html;
+}
+else{
+alert(data);
+}
             });
             $('#add input').each(function () {
                 $(this).val('');
-            });
-        }
+html=' ';
+document.getElementById('para').innerHTML =html;
+});        }
 
         function newusercreate() {
             var user_name = document.getElementById('user_name').value;
@@ -194,7 +201,7 @@
                 Create User
             </a>
             <div class="right menu">
-                <a class="item" href="http://ec2-18-223-38-113.us-east-2.compute.amazonaws.com:7003">
+                <a class="item" href="http://ec2-18-223-38-113.us-east-2.compute.amazonaws.com:7002">
                     LogOut
                 </a>
             </div>
@@ -230,6 +237,10 @@
                             </div>
                             <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
                                 onclick="update()">Submit</button>
+<br>
+<div class="md-form" align="middle">
+<div id="para"></div>
+</div>
 
                         </div>
                         <!-- Form -->
@@ -241,7 +252,7 @@
             </div>
         </div>
         <div class="column">
-            <div>
+            <div style="display:none;">
                 <div class="card">
                     <h5 class="card-header info-color white-text text-center py-4">
                         <strong>Update Status</strong>
