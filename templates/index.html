@@ -73,52 +73,52 @@
             else {
                 document.getElementById('view').style.display = 'none';
             }
-            }
-            
-            function refresh(){
-            
-                $(function () {
-                    $("#table").DataTable({
-                        retrieve: true,
-dom: 'Bfrtip',
-                        buttons: [
-                            'copy', 'csv', 'excel', 'pdf', 'print'
-                        ]
-                    });
+        }
 
-                    // Premade test data, you can also use your own
-                    var testDataUrl = "http://ec2-18-223-38-113.us-east-2.compute.amazonaws.com:7002/getdata"
-                    $.ajax({
-                        type: 'GET',
-                        url: testDataUrl,
-                        contentType: "text/plain",
-                        dataType: 'json',
-                        success: function (data) {
-                            myJsonData = data;
-                            populateDataTable(myJsonData);
-                        }
-                    });
+        function refresh() {
 
-                    // populate the data table with JSON data
-                    function populateDataTable(data) {
-                        // clear the table before populating it with more data
-                        $("#table").DataTable().clear();
-                        var length = Object.keys(data.data).length;
-                        for (var i = 0; i < length + 1; i++) {
-                            var d = data.data['s' + i];
+            $(function () {
+                $("#table").DataTable({
+                    retrieve: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ]
+                });
 
-                            // You could also use an ajax property on the data table initialization
-                            $('#table').dataTable().fnAddData([
-                                d.timestamp,
-                                d.user,
-                                d.order_number,
-                                d.trans_id,
-                                d.Amount
-                            ]);
-                        }
+                // Premade test data, you can also use your own
+                var testDataUrl = "http://ec2-18-223-38-113.us-east-2.compute.amazonaws.com:7002/getdata"
+                $.ajax({
+                    type: 'GET',
+                    url: testDataUrl,
+                    contentType: "text/plain",
+                    dataType: 'json',
+                    success: function (data) {
+                        myJsonData = data;
+                        populateDataTable(myJsonData);
                     }
-                })();
-            
+                });
+
+                // populate the data table with JSON data
+                function populateDataTable(data) {
+                    // clear the table before populating it with more data
+                    $("#table").DataTable().clear();
+                    var length = Object.keys(data.data).length;
+                    for (var i = 0; i < length + 1; i++) {
+                        var d = data.data['s' + i];
+
+                        // You could also use an ajax property on the data table initialization
+                        $('#table').dataTable().fnAddData([
+                            d.timestamp,
+                            d.user,
+                            d.order_number,
+                            d.trans_id,
+                            d.Amount
+                        ]);
+                    }
+                }
+            })();
+
 
         }
 
@@ -138,19 +138,20 @@ dom: 'Bfrtip',
             var trans = document.getElementById('transid').value;
             var amt = document.getElementById('amt').value;
             $.get('/update', { ord: ord, trans: trans, amt: amt }).done(function (data) {
-            if(data=='success'){
-    html = '<div class="alert alert-danger" role="alert">Successfully Updated</div>';
-                document.getElementById('para').innerHTML = html;
-}
-else{
-alert(data);
-}
+                if (data == 'success') {
+                    html = '<div class="alert alert-danger" role="alert">Successfully Updated</div>';
+                    document.getElementById('para').innerHTML = html;
+                }
+                else {
+                    alert(data);
+                }
             });
             $('#add input').each(function () {
                 $(this).val('');
-html=' ';
-document.getElementById('para').innerHTML =html;
-});        }
+                html = ' ';
+                document.getElementById('para').innerHTML = html;
+            });
+        }
 
         function newusercreate() {
             var user_name = document.getElementById('user_name').value;
@@ -207,11 +208,11 @@ document.getElementById('para').innerHTML =html;
             </div>
         </div>
     </div>
-    <div class="row" id="add" style="display: inline;">
-        <div class="column">
+    <div id="add" style="display: inline;">
+        <div align="middle">
             <div>
                 <!-- Material form contact -->
-                <div class="card">
+                <div class="card" style="width:50%">
 
                     <h5 class="card-header info-color white-text text-center py-4">
                         <strong>Record New Entry</strong>
@@ -237,10 +238,10 @@ document.getElementById('para').innerHTML =html;
                             </div>
                             <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
                                 onclick="update()">Submit</button>
-<br>
-<div class="md-form" align="middle">
-<div id="para"></div>
-</div>
+                            <br>
+                            <div class="md-form" align="middle">
+                                <div id="para"></div>
+                            </div>
 
                         </div>
                         <!-- Form -->
@@ -251,33 +252,34 @@ document.getElementById('para').innerHTML =html;
                 <!-- Material form contact -->
             </div>
         </div>
-        <div class="column">
+        <!--<div class="column">
             <div style="display:none;">
                 <div class="card">
                     <h5 class="card-header info-color white-text text-center py-4">
                         <strong>Update Status</strong>
                     </h5>
 
-                    <!--Card content-->
+                    
                     <div class="card-body px-lg-5 pt-0">
 
-                        <!-- Form -->
+                    
                         <br>
                         <br>
                         <div id="alt" class="text-center" style="color: #757575;">
 
                         </div>
-                        <!-- Form -->
+                    
 
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
     </div>
     <div style="display: inline;">
         <div id="view" style="display: none;">
             <div align="middle">
-                <button type="button" class="btn btn-outline-secondary btn-rounded waves-effect" onclick="refresh()">Refresh</button>
+                <button type="button" class="btn btn-outline-secondary btn-rounded waves-effect"
+                    onclick="refresh()">Refresh</button>
             </div>
             <table class="ui red table" id="table">
                 <thead>
@@ -295,10 +297,11 @@ document.getElementById('para').innerHTML =html;
             </table>
         </div>
     </div>
-    <div align="middle" style="width: 40%;">
+   
         <div id="newuser" style="display: none;">
             <!-- Material form contact -->
-            <div class="card">
+            <div align="middle">
+            <div class="card" style="width:50%">
 
                 <h5 class="card-header info-color white-text text-center py-4">
                     <strong>Create New User</strong>
