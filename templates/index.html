@@ -1,6 +1,7 @@
 <html>
 
 <head>
+    <title>ValidationBDSHOP</title>
     <!-- JQuery -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap tooltips -->
@@ -88,7 +89,7 @@
                 });
 
                 // Premade test data, you can also use your own
-                var testDataUrl = "http://ec2-18-223-38-113.us-east-2.compute.amazonaws.com:7002/getdata"
+                var testDataUrl = "http://35.197.134.3:7001/getdata"
                 $.ajax({
                     type: 'GET',
                     url: testDataUrl,
@@ -166,6 +167,18 @@
                 $(this).val('');
             });
         }
+        function newuserupdate() {
+            var user_name = document.getElementById('user_nameu').value;
+            var user_password = document.getElementById('user_passu').value;
+            var e = document.getElementById("sell");
+            var user_role = e.options[e.selectedIndex].value;
+            $.get('/olduserupdate', { user_name: user_name, user_password: user_password, user_role: user_role }).done(function (data) {
+                alert(data);
+            })
+            $('#newuser input').each(function () {
+                $(this).val('');
+            });
+        }
     </script>
     <style>
         .column {
@@ -203,7 +216,7 @@
                 Create User
             </a>
             <div class="right menu">
-                <a class="item" href="http://ec2-18-223-38-113.us-east-2.compute.amazonaws.com:7002">
+                <a class="item" href="http://35.197.134.3:7001">
                     LogOut
                 </a>
             </div>
@@ -253,28 +266,6 @@
                 <!-- Material form contact -->
             </div>
         </div>
-        <!--<div class="column">
-            <div style="display:none;">
-                <div class="card">
-                    <h5 class="card-header info-color white-text text-center py-4">
-                        <strong>Update Status</strong>
-                    </h5>
-
-                    
-                    <div class="card-body px-lg-5 pt-0">
-
-                    
-                        <br>
-                        <br>
-                        <div id="alt" class="text-center" style="color: #757575;">
-
-                        </div>
-                    
-
-                    </div>
-                </div>
-            </div>
-        </div>-->
     </div>
     <div style="display: inline;">
         <div id="view" style="display: none;">
@@ -298,48 +289,89 @@
             </table>
         </div>
     </div>
-   
-        <div id="newuser" style="display: none;">
-            <!-- Material form contact -->
-            <div align="middle">
-            <div class="card" style="width:50%">
 
-                <h5 class="card-header info-color white-text text-center py-4">
-                    <strong>Create New User</strong>
-                </h5>
+    <div id="newuser" style="display: none;">
+        <!-- Material form contact -->
+        <div class="row">
+            <div class="column">
+                <div class="card">
 
-                <!--Card content-->
-                <div class="card-body px-lg-5 pt-0">
+                    <h5 class="card-header info-color white-text text-center py-4">
+                        <strong>Create New User</strong>
+                    </h5>
 
-                    <!-- Form -->
-                    <div class="text-center" style="color: #757575;">
+                    <!--Card content-->
+                    <div class="card-body px-lg-5 pt-0">
 
-                        <!-- Name -->
-                        <div class="md-form mt-3">
-                            <input type="text" id="user_name" class="form-control">
-                            <label for="materialContactFormName">Username</label>
+                        <!-- Form -->
+                        <div class="text-center" style="color: #757575;">
+
+                            <!-- Name -->
+                            <div class="md-form mt-3">
+                                <input type="text" id="user_name" class="form-control">
+                                <label for="materialContactFormName">Username</label>
+                            </div>
+                            <div class="md-form mt-3">
+                                <input type="password" id="user_pass" class="form-control">
+                                <label for="materialContactFormName">Password</label>
+                            </div>
+
+                            <!-- Subject -->
+                            <span>Access</span>
+                            <select id="sel" class="mdb-select">
+                                <option value="" disabled>Choose option</option>
+                                <option value="limited" selected>Limited</option>
+                                <option value="all">All</option>
+                            </select>
+
+                            <!-- Send button -->
+                            <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
+                                onclick="newusercreate()">Create User</button>
                         </div>
-                        <div class="md-form mt-3">
-                            <input type="password" id="user_pass" class="form-control">
-                            <label for="materialContactFormName">Password</label>
-                        </div>
-
-                        <!-- Subject -->
-                        <span>Access</span>
-                        <select id="sel" class="mdb-select">
-                            <option value="" disabled>Choose option</option>
-                            <option value="limited" selected>Limited</option>
-                            <option value="all">All</option>
-                        </select>
-
-                        <!-- Send button -->
-                        <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
-                            onclick="newusercreate()">Create User</button>
+                        <!-- Form -->
                     </div>
-                    <!-- Form -->
+                </div>
+                <!-- Material form contact -->
+            </div>
+            <div class="column">
+                <div class="card">
+
+                    <h5 class="card-header info-color white-text text-center py-4">
+                        <strong>Update User</strong>
+                    </h5>
+
+                    <!--Card content-->
+                    <div class="card-body px-lg-5 pt-0">
+
+                        <!-- Form -->
+                        <div class="text-center" style="color: #757575;">
+
+                            <!-- Name -->
+                            <div class="md-form mt-3">
+                                <input type="text" id="user_nameu" class="form-control">
+                                <label for="materialContactFormName">Username</label>
+                            </div>
+                            <div class="md-form mt-3">
+                                <input type="password" id="user_passu" class="form-control">
+                                <label for="materialContactFormName">Password</label>
+                            </div>
+
+                            <!-- Subject -->
+                            <span>Access</span>
+                            <select id="sell" class="mdb-select">
+                                <option value="" disabled>Choose option</option>
+                                <option value="limited" selected>Limited</option>
+                                <option value="all">All</option>
+                            </select>
+
+                            <!-- Send button -->
+                            <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
+                                onclick="newuserupdate()">Update User</button>
+                        </div>
+                        <!-- Form -->
+                    </div>
                 </div>
             </div>
-            <!-- Material form contact -->
         </div>
     </div>
 </body>

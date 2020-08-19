@@ -40,3 +40,15 @@ def create_new_user(user,passw,role):
         with engine.begin() as conn:
             conn.execute(query)
         return 'New User Added'
+
+def update_new_user(user,passw,role):
+    query = "select * from users;"
+    df = pd.read_sql(query,engine)
+    index_num = list(np.where((df['username']==user))[0])
+    if len(index_num)>0:
+        query = "UPDATE users SET passw = "+passw+", role = "+role+" where username = '"+user+"';"
+        with engine.begin() as conn:
+            conn.execute(query)
+        return 'Successfully Updated User'    
+    else:
+        return 'User Does Not Exist'

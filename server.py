@@ -53,5 +53,13 @@ def newusercreate():
     create_user = data_storage.create_new_user(user,passw,role)
     return create_user
 
+@app.route('/olduserupdate', methods = ['GET','POST'])
+def newuserupdate():
+    user = request.args.get('user_name')
+    passw = request.args.get('user_password')
+    role = request.args.get('user_role')
+    create_user = data_storage.update_new_user(user,passw,role)
+    return create_user
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=7002)
+    app.run(host='0.0.0.0', port=7001)
