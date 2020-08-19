@@ -12,13 +12,12 @@ def login():
 
 @app.route('/index', methods = ['GET','POST'])
 def index():
-    global username
     username = request.form['username']
     pasw = request.form['pass']
     try:
         role = user_df.loc[(user_df['username']==username) & (user_df['passw']==pasw),'role'].iloc[0]
         if len(user_df[(user_df['username']==username) & (user_df['passw'] == pasw)])>0:
-            return render_template('index.html',user = role)
+            return render_template('index.html',user = username, role=role)
     except:
         return render_template('login.html',error = 'Invalid Creds!')
 #    return render_template('index.html',user='all')
@@ -28,9 +27,10 @@ def update():
     ordn = request.args.get('ord')
     trans = request.args.get('trans')
     amt = request.args.get('amt')
+    user = request.args.get('user')
     next_proc = data_storage.check(trans)
     if next_proc == 'Not Exist':
-        updation = data_storage.update(username,str(datetime.datetime.now().replace(microsecond=0)),ordn,trans,amt)
+        updation = data_storage.update(user,str(datetime.datetime.now().replace(microsecond=0)),ordn,trans,amt)
         return 'success'
     return next_proc
 

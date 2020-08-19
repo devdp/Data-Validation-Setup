@@ -55,7 +55,8 @@
             });
         });
 
-        var role = "{{user}}";
+        var role = "{{role}}";
+        var userr = "{{user}}";
 
         function addrecord() {
             document.getElementById('add').style.display = 'inline';
@@ -137,7 +138,7 @@
             var ord = document.getElementById('ordnum').value;
             var trans = document.getElementById('transid').value;
             var amt = document.getElementById('amt').value;
-            $.get('/update', { ord: ord, trans: trans, amt: amt }).done(function (data) {
+            $.get('/update', { ord: ord, trans: trans, amt: amt, user: user }).done(function (data) {
                 if (data == 'success') {
                     html = '<div class="alert alert-danger" role="alert">Successfully Updated</div>';
                     document.getElementById('para').innerHTML = html;

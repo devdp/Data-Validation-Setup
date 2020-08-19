@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 import numpy as np
 
-engine = create_engine("mysql+pymysql://dev:Dev@1234@@127.0.0.1/up?host=localhost")
+engine = create_engine("mysql+pymysql://root:Dev@1234@@34.87.23.17/validation?host=localhost")
 
 def update(user, timestamp, order_number, trans_id, Amount):
     query = "insert into data values('"+str(user)+"','"+timestamp+"','"+order_number+"','"+trans_id+"','"+Amount+"');"
