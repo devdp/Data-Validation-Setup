@@ -48,6 +48,7 @@ def update_new_user(user,passw,role):
     if len(index_num)>0:
         query = "UPDATE users SET passw = "+passw+", role = "+role+" where username = '"+user+"';"
         with engine.begin() as conn:
-            conn.execute(query)    
+            conn.execute(query)
+        return 'Successfully Updated User'    
     else:
         return 'User Does Not Exist'
