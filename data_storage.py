@@ -23,8 +23,9 @@ def check(trans):
     df = pd.read_sql(query,engine)
     index_num = list(np.where((df["trans_id"] ==trans))[0])
     if len(index_num)>0:
-        index_num = int(index_num[0])+1
-        return 'Already Exist At Row Number {}'.format(str(index_num))
+        index_num = int(index_num[0])
+        ordis = df['order_number'][index_num]
+        return 'Already Exist Order Number : {}'.format(str(ordis))
     else:
         return 'Not Exist'
     return 'Not able to check'
@@ -54,13 +55,21 @@ def update_new_user(user,passw,role):
         return 'User Does Not Exist'
 
 def uprec(amtup,orderup,transup,userr):
-    query = "UPDATE data SET user='"+userr+"', order_number='"+orderup+"', Amount='"+amtup+"' where trans_id='"+transup+"';"
-    with engine.begin() as conn:
-        conn.execute(query)
-    return "Successfully Updated Record"
+    df = pd.read_sql("select * from data;",engine)
+    if(len(df.loc[df['trans_id']==transup])):
+        query = "UPDATE data SET user='"+userr+"', order_number='"+orderup+"', Amount='"+amtup+"' where trans_id='"+transup+"';"
+        with engine.begin() as conn:
+            conn.execute(query)
+        return "Successfully Updated Record"
+    else:
+        return "Record Doesn't Exist"
 
 def delrec(trid):
-    query = "Delete from data where trans_id='"+trid+"';"
-    with engine.begin() as conn:
-        conn.execute(query)
-    return "Successfully Deleted Record"
+    df = pd.read_sql("select * from data;",engine)
+    if(len(df.loc[df['trans_id']==trid])):
+        query = "Delete from data where trans_id='"+trid+"';"
+        with engine.begin() as conn:
+            conn.execute(query)
+        return "Successfully Deleted Record"
+    else:
+        return "Record Doesn't Exist"
