@@ -30,7 +30,7 @@ def update():
     user = request.args.get('user')
     next_proc = data_storage.check(trans)
     if next_proc == 'Not Exist':
-        updation = data_storage.update(user,str(datetime.datetime.now().replace(microsecond=0)),ordn,trans,amt)
+        updation = data_storage.update(user,str(datetime.datetime.now().replace(microsecond=0)+datetime.timedelta(hours=6)),ordn,trans,amt)
         return 'success'
     return next_proc
 
@@ -61,5 +61,20 @@ def newuserupdate():
     create_user = data_storage.update_new_user(user,passw,role)
     return create_user
 
+@app.route('/ordupdate', methods=['GET','POST'])
+def ordup():
+    amtup = request.args.get('amtup')
+    orderup = request.args.get('orderup')
+    transup = request.args.get('transup')
+    userr = request.args.get('userr')
+    update_status = data_storage.uprec(amtup,orderup,transup,userr)
+    return update_status
+
+@app.route('/delrecord', methods=['GET','POST'])
+def delrec():
+    trid = request.args.get('trans_del')
+    del_status = data_storage.delrec(trid)
+    return del_status
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=7001)
+    app.run(host='0.0.0.0', port=80)

@@ -46,9 +46,21 @@ def update_new_user(user,passw,role):
     df = pd.read_sql(query,engine)
     index_num = list(np.where((df['username']==user))[0])
     if len(index_num)>0:
-        query = "UPDATE users SET passw = "+passw+", role = "+role+" where username = '"+user+"';"
+        query = "UPDATE users SET passw = '"+passw+"', role = '"+role+"' where username = '"+user+"';"
         with engine.begin() as conn:
             conn.execute(query)
         return 'Successfully Updated User'    
     else:
         return 'User Does Not Exist'
+
+def uprec(amtup,orderup,transup,userr):
+    query = "UPDATE data SET user='"+userr+"', order_number='"+orderup+"', Amount='"+amtup+"' where trans_id='"+transup+"';"
+    with engine.begin() as conn:
+        conn.execute(query)
+    return "Successfully Updated Record"
+
+def delrec(trid):
+    query = "Delete from data where trans_id='"+trid+"';"
+    with engine.begin() as conn:
+        conn.execute(query)
+    return "Successfully Deleted Record"
