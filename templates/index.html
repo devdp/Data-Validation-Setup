@@ -63,17 +63,19 @@
             document.getElementById('add').style.display = 'inline';
             document.getElementById('view').style.display = 'none';
             document.getElementById('newuser').style.display = 'none';
+            document.getElementById('rec').style.display = 'none';
         }
 
         function viewdata() {
             document.getElementById('add').style.display = 'none';
             document.getElementById('newuser').style.display = 'none';
+            document.getElementById('view').style.display = 'inline';
             if (role == 'all') {
-                document.getElementById('view').style.display = 'inline';
+                document.getElementById('rec').style.display = 'inline';
             }
 
             else {
-                document.getElementById('view').style.display = 'none';
+                document.getElementById('none').style.display = 'none';
             }
         }
 
@@ -89,7 +91,7 @@
                 });
 
                 // Premade test data, you can also use your own
-                var testDataUrl = "http://35.197.134.3:7001/getdata"
+                var testDataUrl = "/getdata"
                 $.ajax({
                     type: 'GET',
                     url: testDataUrl,
@@ -126,6 +128,7 @@
 
         function newuser() {
             document.getElementById('view').style.display = 'none';
+            document.getElementById('rec').style.display = 'none';
             document.getElementById('add').style.display = 'none';
             if (role == 'all') {
                 document.getElementById('newuser').style.display = 'inline';
@@ -139,7 +142,7 @@
             var ord = document.getElementById('ordnum').value;
             var trans = document.getElementById('transid').value;
             var amt = document.getElementById('amt').value;
-            $.get('/update', { ord: ord, trans: trans, amt: amt, user: user }).done(function (data) {
+            $.get('/update', { ord: ord, trans: trans, amt: amt, user: userr }).done(function (data) {
                 if (data == 'success') {
                     html = '<div class="alert alert-danger" role="alert">Successfully Updated</div>';
                     document.getElementById('para').innerHTML = html;
@@ -179,6 +182,21 @@
                 $(this).val('');
             });
         }
+        function uprec() {
+            var amtup = document.getElementById('amtup').value;
+            var orderup = document.getElementById('orderup').value;
+            var transup = document.getElementById('transup').value;
+            $.get('/ordupdate', { amtup: amtup, orderup: orderup, transup: transup, userr: userr }).done(function (data) {
+                alert(data);
+            })
+        }
+        function delrec() {
+            var trans_del = document.getElementById('trans_del').value;
+            $.get('/delrecord', { trans_del: trans_del }).done(function (data) {
+                alert(data);
+            })
+        }
+
     </script>
     <style>
         .column {
@@ -186,6 +204,14 @@
             width: 50%;
             padding: 10px;
             height: 300px;
+            /* Should be removed. Only for demonstration */
+        }
+
+        .column1 {
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: 65px;
             /* Should be removed. Only for demonstration */
         }
 
@@ -200,6 +226,10 @@
             background-color: background-color: #a4508b;
             background-image: linear-gradient(326deg, #a4508b 0%, #5f0a87 74%);
         }
+        a.nav-link {
+    color: #eaecef;
+    text-decoration: none;
+}
     </style>
 </head>
 
@@ -216,7 +246,7 @@
                 Create User
             </a>
             <div class="right menu">
-                <a class="item" href="http://35.197.134.3:7001">
+                <a class="item" href="http://validation.bdshop.com">
                     LogOut
                 </a>
             </div>
@@ -269,9 +299,22 @@
     </div>
     <div style="display: inline;">
         <div id="view" style="display: none;">
-            <div align="middle">
-                <button type="button" class="btn btn-outline-secondary btn-rounded waves-effect"
-                    onclick="refresh()">Refresh</button>
+            <div class="row">
+                <div class="column1">
+                    <div align="middle">
+                        <button type="button" class="btn btn-outline-secondary btn-rounded waves-effect"
+                            onclick="refresh()">Refresh</button>
+                    </div>
+                </div>
+                <div class="column1">
+                    <div id="rec" style="display: none;">
+                        <div class="text-center">
+                            <a href="" class="btn btn-outline-secondary btn-rounded waves-effect" data-toggle="modal"
+                                data-target="#modalLRForm">
+                                Record Update/Delete</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <table class="ui red table" id="table">
                 <thead>
@@ -287,6 +330,9 @@
 
                 </tbody>
             </table>
+            <div>
+
+            </div>
         </div>
     </div>
 
@@ -377,3 +423,82 @@
 </body>
 
 </html>
+
+
+<!--Modal: Login / Register Form-->
+<div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog cascading-modal" role="document">
+        <!--Content-->
+        <div class="modal-content">
+
+            <!--Modal cascading tabs-->
+            <div class="modal-c-tabs">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs md-tabs tabs-2 light-blue darken-3" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab">
+                            Delete Record</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#panel8" role="tab">
+                            Update Record</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panels -->
+                <div class="tab-content">
+                    <!--Panel 7-->
+                    <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+
+                        <!--Body-->
+                        <div class="modal-body mb-1">
+                            <div class="md-form form-sm mb-5">
+                                <input type="text" id="trans_del" class="form-control form-control-sm validate">
+                                <label data-error="wrong" data-success="right" for="modalLRInput10">Transaction
+                                    ID</label>
+                            </div>
+                            <div class="text-center mt-2">
+                                <button class="btn btn-info" onclick="delrec()">Delete<i
+                                        class="fas fa-sign-in ml-1"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/.Panel 7-->
+
+                    <!--Panel 8-->
+                    <div class="tab-pane fade" id="panel8" role="tabpanel">
+
+                        <!--Body-->
+                        <div class="modal-body">
+                            <div class="md-form form-sm mb-5">
+                                <input type="text" id="transup" class="form-control form-control-sm validate">
+                                <label data-error="wrong" data-success="right" for="modalLRInput12">Transaction
+                                    ID</label>
+                            </div>
+
+                            <div class="md-form form-sm mb-5">
+                                <input type="text" id="orderup" class="form-control form-control-sm validate">
+                                <label data-error="wrong" data-success="right" for="modalLRInput12">Order Number</label>
+                            </div>
+
+                            <div class="md-form form-sm mb-5">
+                                <input type="text" id="amtup" class="form-control form-control-sm validate">
+                                <label data-error="wrong" data-success="right" for="modalLRInput12">Amount</label>
+                            </div>
+
+                            <div class="text-center form-sm mt-2">
+                                <button class="btn btn-info" onclick="uprec()">Update Record <i
+                                        class="fas fa-sign-in ml-1"></i></button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--/.Panel 8-->
+                </div>
+
+            </div>
+        </div>
+        <!--/.Content-->
+    </div>
+</div>
