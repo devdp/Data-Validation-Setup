@@ -189,12 +189,18 @@
             $.get('/ordupdate', { amtup: amtup, orderup: orderup, transup: transup, userr: userr }).done(function (data) {
                 alert(data);
             })
+            $('#modalLRForm input').each(function () {
+                $(this).val('');
+            });
         }
         function delrec() {
             var trans_del = document.getElementById('trans_del').value;
             $.get('/delrecord', { trans_del: trans_del }).done(function (data) {
                 alert(data);
             })
+            $('#modalLRForm input').each(function () {
+                $(this).val('');
+            });
         }
 
     </script>
