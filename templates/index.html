@@ -232,10 +232,16 @@
             background-color: background-color: #a4508b;
             background-image: linear-gradient(326deg, #a4508b 0%, #5f0a87 74%);
         }
+
         a.nav-link {
-    color: #eaecef;
-    text-decoration: none;
-}
+            color: #eaecef;
+            text-decoration: none;
+        }
+
+        .dataTables_wrapper {
+            margin-left: 1.5%;
+            margin-right: 1.5%;
+        }
     </style>
 </head>
 
@@ -307,17 +313,23 @@
         <div id="view" style="display: none;">
             <div class="row">
                 <div class="column1">
-                    <div align="middle">
-                        <button type="button" class="btn btn-outline-secondary btn-rounded waves-effect"
-                            onclick="refresh()">Refresh</button>
+                    <div align="right">
+                        <div align="right">
+                            <button type="button" class="btn btn-outline-secondary btn-rounded waves-effect"
+                                onclick="refresh()">Refresh</button>
+                        </div>
                     </div>
                 </div>
                 <div class="column1">
-                    <div id="rec" style="display: none;">
-                        <div class="text-center">
-                            <a href="" class="btn btn-outline-secondary btn-rounded waves-effect" data-toggle="modal"
-                                data-target="#modalLRForm">
-                                Record Update/Delete</a>
+                    <div align="left">
+                        <div id="rec" style="display: none;">
+                            <div align="left">
+                                <div class="text-center">
+                                    <a href="" class="btn btn-outline-secondary btn-rounded waves-effect"
+                                        data-toggle="modal" data-target="#modalLRForm" style="left: -37%;">
+                                        Record Update/Delete</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
